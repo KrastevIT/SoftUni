@@ -7,14 +7,13 @@ namespace _03_Word_Filter
     {
         static void Main(string[] args)
         {
-            string[] words = Console.ReadLine()
-                .Split()
-                .Where(x => x.Length % 2 == 0)
-                .ToArray();
+            var words = Console.ReadLine()
+               .Split()
+               .Where(x => x.Length % 2 == 0);
 
             foreach (var word in words)
             {
-                Console.WriteLine($"{word} ");
+                Console.WriteLine(word);
             }
         }
     }

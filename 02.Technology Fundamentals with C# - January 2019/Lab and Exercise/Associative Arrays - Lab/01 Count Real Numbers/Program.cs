@@ -9,29 +9,26 @@ namespace _01_Count_Real_Numbers
         static void Main(string[] args)
         {
             int[] numbers = Console.ReadLine()
-                .Split()
-                .Select(int.Parse)
-                .ToArray();
+                 .Split()
+                 .Select(int.Parse)
+                 .ToArray();
 
             var counts = new SortedDictionary<int, int>();
 
-            foreach (var number in numbers)
+            foreach (var num in numbers)
             {
-                if (counts.ContainsKey(number))
+                if (!counts.ContainsKey(num))
                 {
-                    counts[number]++;
+                    counts[num] = 0;
                 }
-                else
-                {
-                    counts.Add(number, 1);
-                }
-            }
-                
-            foreach (var number in counts)
-            {
-                Console.WriteLine($"{number.Key} -> {number.Value}");
+
+                counts[num]++;
             }
 
+            foreach (var kvp in counts)
+            {
+                Console.WriteLine($"{kvp.Key} -> {kvp.Value}");
+            }
         }
     }
 }

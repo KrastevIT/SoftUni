@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01 Count Real Numbers", "01
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02 Word Synonyms", "02 Word Synonyms\02 Word Synonyms.csproj", "{E310BA10-5A47-4531-9C75-3F49FB9A5A88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05 Odd Occurrences", "05 Odd Occurrences\05 Odd Occurrences.csproj", "{4EEDC6B9-3766-44C6-A309-839650C252FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "05 Odd Occurrences", "05 Odd Occurrences\05 Odd Occurrences.csproj", "{4EEDC6B9-3766-44C6-A309-839650C252FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03 Word Filter", "03 Word Filter\03 Word Filter.csproj", "{D15465B8-44D6-4883-972E-4E98F6979E12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "03 Word Filter", "03 Word Filter\03 Word Filter.csproj", "{D15465B8-44D6-4883-972E-4E98F6979E12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04 Largest 3 Numbers", "04 Largest 3 Numbers\04 Largest 3 Numbers.csproj", "{6CB24FF7-CBCE-4EFB-808B-8D08487CF5CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "04 Largest 3 Numbers", "04 Largest 3 Numbers\04 Largest 3 Numbers.csproj", "{6CB24FF7-CBCE-4EFB-808B-8D08487CF5CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

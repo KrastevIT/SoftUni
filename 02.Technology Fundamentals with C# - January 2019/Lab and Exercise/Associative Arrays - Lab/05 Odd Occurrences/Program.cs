@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace _05_Odd_Occurrences
 {
@@ -7,28 +8,23 @@ namespace _05_Odd_Occurrences
     {
         static void Main(string[] args)
         {
-            string[] words = Console.ReadLine().ToLower().Split();
+            string[] symbols = Console.ReadLine().ToLower().Split();
 
-            var counts = new Dictionary<string, int>();
+            var words = new Dictionary<string, int>();
 
-            foreach (string word in words)
+            foreach (var symbol in symbols)
             {
-                if (counts.ContainsKey(word))
+                if (!words.ContainsKey(symbol))
                 {
-                    counts[word]++;
+                    words[symbol] = 0;
                 }
-                else
-                {
-                    counts.Add(word, 1);
-                }
+
+                words[symbol]++;
             }
 
-            foreach (var count in counts)
+            foreach (var kvp in words.Where(x => x.Value % 2 == 1))
             {
-                if (count.Value % 2 == 1)
-                {
-                    Console.Write(count.Key + " ");
-                }
+                Console.Write(kvp.Key + " ");
             }
         }
     }
