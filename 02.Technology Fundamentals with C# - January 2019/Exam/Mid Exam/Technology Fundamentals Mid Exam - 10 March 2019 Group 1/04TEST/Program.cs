@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace _01_Spring_Vacation_Trip
+namespace _04TEST
 {
     class Program
     {
@@ -26,7 +28,11 @@ namespace _01_Spring_Vacation_Trip
 
                 expenses += travelDistance * fuelPerKilometer;
 
-                if (i % 3 == 0 || i % 5 == 0)
+                if (i % 3 == 0)
+                {
+                    expenses *= 1.4;
+                }
+                if (i % 5 == 0)
                 {
                     expenses *= 1.4;
                 }
@@ -34,17 +40,16 @@ namespace _01_Spring_Vacation_Trip
                 {
                     expenses -= expenses / groupOfPeople;
                 }
+            }
 
-                if (expenses > budget)
-                {
-                    Console.WriteLine($"Not enough money to continue the trip. You need {(expenses - budget):f2}$ more.");
-                    return;
-                }
+            if (expenses > budget)
+            {
+                Console.WriteLine($"Not enough money to continue the trip. You need {(expenses - budget):f2}$ more.");
+                return;
             }
 
             Console.WriteLine($"You have reached the destination. You have {(budget - expenses):f2}$ budget left.");
-
-
         }
+
     }
 }

@@ -8,108 +8,64 @@ namespace _02_Hello_France
     {
         static void Main(string[] args)
         {
-            List<string> items = Console.ReadLine()
-                .Split("|")
-                .ToList();
-
+            string[] input = Console.ReadLine().Split("|");
             double budget = double.Parse(Console.ReadLine());
 
-            List<string> newItems = new List<string>();
-
+            var finalPrice = new List<double>();
             double profit = 0;
-            double needSum = 150;
-            bool test = true;
 
-            double clothes = 50.00;
-            double shoes = 35.00;
-            double accessories = 20.50;
-
-
-            for (int i = 0; i < items.Count; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                string[] command = items[i].Split("->");
-                string item = command[0];
-                double sum = double.Parse(command[1]);
+                string[] splitProducts = input[i].Split("->");
 
-                if (item == "Clothes")
-                {
-                    if (budget >= sum && sum <= clothes)
-                    {
-                        budget -= sum;
-                        newItems.Add(items[i]);
-                    }
+                string product = splitProducts[0];
+                double price = double.Parse(splitProducts[1]);
 
-                }
-                else if (item == "Shoes")
+                if (product == "Clothes")
                 {
-                    if (budget >= sum && sum <= shoes)
+                    if (price <= 50.00 && budget >= price)
                     {
-                        budget -= sum;
-                        newItems.Add(items[i]);
+                        budget -= price;
+                        profit += price * 0.40;
+                        finalPrice.Add(price * 1.40);
                     }
                 }
-                else if (item == "Accessories")
+                else if (product == "Shoes")
                 {
-                    if (budget >= sum && sum <= accessories)
+                    if (price <= 35.00 && budget >= price)
                     {
-                        budget -= sum;
-                        newItems.Add(items[i]);
+                        budget -= price;
+                        profit += price * 0.40;
+                        finalPrice.Add(price * 1.40);
                     }
                 }
-                else if (budget >= sum)
+                else if (product == "Accessories")
                 {
-                    budget -= sum;
-                    newItems.Add(items[i]);
+                    if (price <= 20.50 && budget >= price)
+                    {
+                        budget -= price;
+                        profit += price * 0.40;
+                        finalPrice.Add(price * 1.40);
+                    }
                 }
             }
 
-            needSum -= budget;
-            List<double> sellSum = new List<double>();
-            double increase = 0;
-            double testSum = 0;
-            testSum += budget;
-
-            for (int i = 0; i < newItems.Count; i++)
+            foreach (var number in finalPrice)
             {
-                string[] command = newItems[i].Split("->");
-                string item = command[0];
-                double sum = double.Parse(command[1]);
-
-                profit += sum * 0.40;
-                increase = sum * 0.40;
-
-                testSum += sum + increase;
-
-                if (testSum > needSum)
-                {
-                    sellSum.Add(sum + increase);
-
-                    foreach (var input in sellSum)
-                    {
-                        Console.Write($"{input:F2} ");
-                    }
-                    Console.WriteLine();
-                    Console.WriteLine($"Profit: {profit:F2}");
-                    Console.WriteLine("Hello, France!");
-                    test = false;
-                    break;
-                }
-                else
-                {
-                    sellSum.Add(sum + increase);
-                    
-                }
+                Console.Write($"{number:F2}" + " ");
             }
 
-            double totalSum = sellSum.Sum();
+            Console.WriteLine();
+            Console.WriteLine($"Profit: {profit:F2}");
 
-            if (test)
+            if (budget + finalPrice.Sum() >= 150)
             {
-                Console.WriteLine(string.Join(" ", sellSum));
-                Console.WriteLine($"Profit: {profit:F2}");
+                Console.WriteLine("Hello, France!");
+            }
+            else
+            {
                 Console.WriteLine("Time to go.");
             }
-
         }
     }
 }
