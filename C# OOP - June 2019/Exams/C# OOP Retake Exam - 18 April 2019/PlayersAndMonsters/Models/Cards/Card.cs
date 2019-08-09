@@ -1,9 +1,11 @@
-﻿namespace PlayersAndMonsters.Models.Cards
+﻿using PlayersAndMonsters.Common;
+using PlayersAndMonsters.Models.Cards.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PlayersAndMonsters.Models.Cards
 {
-    using System;
-
-    using Contracts;
-
     public abstract class Card : ICard
     {
         private string name;
@@ -22,7 +24,7 @@
             get => this.name;
             private set
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     throw new ArgumentException("Card's name cannot be null or an empty string.");
                 }
@@ -61,7 +63,8 @@
 
         public override string ToString()
         {
-            return $"Card: {this.Name} - Damage: {this.DamagePoints}";
+            return string.Format(
+                ConstantMessages.CardReportInfo, this.Name, this.DamagePoints);
         }
     }
 }

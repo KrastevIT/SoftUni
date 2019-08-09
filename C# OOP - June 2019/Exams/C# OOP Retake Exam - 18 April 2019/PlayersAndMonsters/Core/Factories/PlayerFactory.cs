@@ -1,35 +1,22 @@
-﻿namespace PlayersAndMonsters.Core.Factories
+﻿using PlayersAndMonsters.Core.Factories.Contracts;
+using PlayersAndMonsters.Models.Players.Contracts;
+using System;
+using System.Reflection;
+using System.Linq;
+using PlayersAndMonsters.Repositories;
+
+namespace PlayersAndMonsters.Core.Factories
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-
-    using Contracts;
-    using Models.Players.Contracts;
-    using Repositories;
-
     public class PlayerFactory : IPlayerFactory
     {
         public IPlayer CreatePlayer(string type, string username)
         {
-            var playerType = Assembly
+            Type playerType = Assembly
                 .GetCallingAssembly()
                 .GetTypes()
-                .Where(x => x.Name == type && !x.IsAbstract)
-                .FirstOrDefault();
+                .FirstOrDefault(x => x.Name == type);
 
-            if (playerType == null)
-            {
-                throw new ArgumentException("Invalid player type!");
-            }
-
-            var parameters = new object[]
-            {
-                new CardRepository(),
-                username
-            };
-
-            var player = (IPlayer)Activator.CreateInstance(playerType, parameters);
+            var player = (IPlayer)Activator.CreateInstance(playerType, new CardRepository(), username);
 
             return player;
         }

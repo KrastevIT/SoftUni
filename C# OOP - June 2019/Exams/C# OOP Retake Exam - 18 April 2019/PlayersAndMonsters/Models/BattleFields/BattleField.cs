@@ -1,12 +1,13 @@
-﻿namespace PlayersAndMonsters.Models.BattleFields
+﻿using PlayersAndMonsters.Models.BattleFields.Contracts;
+using PlayersAndMonsters.Models.Players;
+using PlayersAndMonsters.Models.Players.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+
+namespace PlayersAndMonsters.Models.BattleFields
 {
-    using System;
-    using System.Linq;
-
-    using Contracts;
-    using Players;
-    using Players.Contracts;
-
     public class BattleField : IBattleField
     {
         public void Fight(IPlayer attackPlayer, IPlayer enemyPlayer)
@@ -16,47 +17,65 @@
                 throw new ArgumentException("Player is dead!");
             }
 
-            if (attackPlayer.GetType() == typeof(Beginner))
+            if (attackPlayer is Beginner)
             {
-                attackPlayer.Health += 40;
-                attackPlayer.CardRepository.Cards.ToList().ForEach(x => x.DamagePoints += 30);
+                this.BoostBeginnerPlayer(attackPlayer);
             }
 
-            if (enemyPlayer.GetType() == typeof(Beginner))
+            if (enemyPlayer is Beginner)
             {
-                enemyPlayer.Health += 40;
-                enemyPlayer.CardRepository.Cards.ToList().ForEach(x => x.DamagePoints += 30);
+                this.BoostBeginnerPlayer(enemyPlayer);
             }
 
-            attackPlayer.Health += attackPlayer.CardRepository.Cards.Sum(x => x.HealthPoints);
-            enemyPlayer.Health += enemyPlayer.CardRepository.Cards.Sum(x => x.HealthPoints);
+
+            BoostPlayer(attackPlayer);
+            BoostPlayer(enemyPlayer);
+
+            int attackDamagePoint = attackPlayer
+                   .CardRepository
+                   .Cards.Sum(x => x.DamagePoints);
+
+            int enemyDamagePoint = enemyPlayer
+                   .CardRepository
+                   .Cards.Sum(x => x.DamagePoints);
 
             while (true)
             {
-                var attackPlayerDamage = attackPlayer
-                    .CardRepository
-                    .Cards
-                    .Sum(x => x.DamagePoints);
-
-                enemyPlayer.TakeDamage(attackPlayerDamage);
+                enemyPlayer.TakeDamage(attackDamagePoint);
 
                 if (enemyPlayer.IsDead)
                 {
                     break;
                 }
 
-                var enemyPlayerDamage = enemyPlayer
-                    .CardRepository
-                    .Cards
-                    .Sum(x => x.DamagePoints);
-
-                attackPlayer.TakeDamage(enemyPlayerDamage);
+                attackPlayer.TakeDamage(enemyDamagePoint);
 
                 if (attackPlayer.IsDead)
                 {
                     break;
                 }
             }
+        }
+
+        private static void BoostPlayer(IPlayer player)
+        {
+            int playerBonusHealth = player
+                            .CardRepository
+                            .Cards
+                            .Sum(x => x.HealthPoints);
+
+            player.Health += playerBonusHealth;
+        }
+
+        private void BoostBeginnerPlayer(IPlayer player)
+        {
+            player.Health += 40;
+
+            foreach (var card in player.CardRepository.Cards)
+            {
+                card.DamagePoints += 30;
+            }
+
         }
     }
 }

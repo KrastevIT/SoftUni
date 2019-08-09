@@ -1,13 +1,20 @@
-﻿namespace PlayersAndMonsters.IO
+﻿using PlayersAndMonsters.IO.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PlayersAndMonsters.IO
 {
-    using System;
-
-    using Contracts;
-
-    public class ConsoleWriter : IWriter
+    class ConsoleWriter : IWriter
     {
-        public void Write(object obj) => Console.Write(obj);
+        public void Write(string message)
+        {
+            Console.Write(message);
+        }
 
-        public void WriteLine(object obj) => Console.WriteLine(obj);
+        public void WriteLine(string message)
+        {
+            Console.WriteLine(message);
+        }
     }
 }

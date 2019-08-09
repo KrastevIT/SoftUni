@@ -1,19 +1,21 @@
-﻿namespace PlayersAndMonsters.Models.Players
+﻿using PlayersAndMonsters.Common;
+using PlayersAndMonsters.Models.Players.Contracts;
+using PlayersAndMonsters.Repositories.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PlayersAndMonsters.Models.Players
 {
-    using System;
-
-    using Contracts;
-    using Repositories.Contracts;
-
     public abstract class Player : IPlayer
     {
         private string username;
         private int health;
 
-        protected Player(ICardRepository cardRepository, string username, int health)
+        protected Player(ICardRepository cardRepository, string userName, int health)
         {
             this.CardRepository = cardRepository;
-            this.Username = username;
+            this.Username = userName;
             this.Health = health;
         }
 
@@ -24,7 +26,7 @@
             get => this.username;
             private set
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     throw new ArgumentException("Player's username cannot be null or an empty string. ");
                 }
@@ -46,7 +48,6 @@
                 this.health = value;
             }
         }
-
         public bool IsDead => this.Health == 0;
 
         public void TakeDamage(int damagePoints)
@@ -68,7 +69,10 @@
 
         public override string ToString()
         {
-            return $"Username: {this.Username} - Health: {this.Health} - Cards {this.CardRepository.Count}";
+            return string.Format(ConstantMessages.PlayerReportInfo,
+                this.Username,
+                this.Health,
+                this.CardRepository.Count);
         }
     }
 }

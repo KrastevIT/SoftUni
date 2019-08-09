@@ -1,92 +1,72 @@
-﻿namespace PlayersAndMonsters.Core
+﻿using PlayersAndMonsters.Core.Contracts;
+using PlayersAndMonsters.IO.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PlayersAndMonsters.Core
 {
-    using System;
-
-    using Commands.Contracts;
-    using Contracts;
-    using IO.Contracts;
-
     public class Engine : IEngine
     {
-        private const string EndCommand = "Exit";
+        private IReader reader;
+        private IWriter writer;
+        private IManagerController managerController;
 
-        private readonly ICommandParser commandParser;
-        private readonly IManagerController managerController;
-
-        private readonly IReader dataReader;
-        private readonly IWriter dataWriter;
-
-        public Engine(
-            ICommandParser commandParser,
-            IManagerController managerController,
-            IReader dataReader,
-            IWriter dataWriter)
+        public Engine(IReader reader, IWriter writer, IManagerController managerController)
         {
-            this.commandParser = commandParser;
+            this.reader = reader;
+            this.writer = writer;
             this.managerController = managerController;
-            this.dataReader = dataReader;
-            this.dataWriter = dataWriter;
         }
 
         public void Run()
         {
-            var input = this.dataReader.ReadLine();
-
-            while (input != EndCommand)
+            while (true)
             {
-                try
+                string line = this.reader.ReadLine();
+
+                if (line == "Exit")
                 {
-                    this.ExecuteCommands(input);
-                }
-                catch (ArgumentException ae)
-                {
-                    this.dataWriter.WriteLine(ae.Message);
+                    break;
                 }
 
-                input = this.dataReader.ReadLine();
+                string[] lineParts = line.Split();
+                string commad = lineParts[0];
+
+                string result = string.Empty;
+                string cardName = string.Empty;
+
+                switch (commad)
+                {
+                    case "AddPlayer":
+                        string playerType = lineParts[1];
+                        string playerUserName = lineParts[2];
+                        result = managerController.AddPlayer(playerType, playerUserName);
+                        break;
+                    case "AddCard":
+                        string cardType = lineParts[1];
+                        cardName = lineParts[2];
+                        result = managerController.AddCard(cardType, cardName);
+                        break;
+                    case "AddPlayerCard":
+                        string username = lineParts[1];
+                        cardName = lineParts[2];
+                        result = managerController.AddPlayerCard(username, cardName);
+                        break;
+                    case "Fight":
+                        string attackUser = lineParts[1];
+                        string enemyUser = lineParts[2];
+                        result = managerController.Fight(attackUser, enemyUser);
+                        break;
+                    case "Report":
+                        result = managerController.Report();
+                        break;
+                    default:
+                        break;
+                }
+
+                this.writer.WriteLine(result);
             }
-        }
-
-        private void ExecuteCommands(string input)
-        {
-            var command = this.commandParser.Parse(input);
-
-            var message = string.Empty;
-
-            if (command.Name == "AddPlayer")
-            {
-                var playerType = command.Arguments[0];
-                var playerUsername = command.Arguments[1];
-
-                message = this.managerController.AddPlayer(playerType, playerUsername);
-            }
-            else if (command.Name == "AddCard")
-            {
-                var cardType = command.Arguments[0];
-                var cardName = command.Arguments[1];
-
-                message = this.managerController.AddCard(cardType, cardName);
-            }
-            else if (command.Name == "AddPlayerCard")
-            {
-                var playerUsername = command.Arguments[0];
-                var cardName = command.Arguments[1];
-
-                message = this.managerController.AddPlayerCard(playerUsername, cardName);
-            }
-            else if (command.Name == "Fight")
-            {
-                var attackUser = command.Arguments[0];
-                var enemyUser = command.Arguments[1];
-
-                message = this.managerController.Fight(attackUser, enemyUser);
-            }
-            else if (command.Name == "Report")
-            {
-                message = this.managerController.Report();
-            }
-
-            this.dataWriter.WriteLine(message);
         }
     }
 }

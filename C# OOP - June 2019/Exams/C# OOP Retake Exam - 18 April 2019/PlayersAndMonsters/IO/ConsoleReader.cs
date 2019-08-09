@@ -1,11 +1,15 @@
-﻿namespace PlayersAndMonsters.IO
+﻿using PlayersAndMonsters.IO.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace PlayersAndMonsters.IO
 {
-    using System;
-
-    using Contracts;
-
     public class ConsoleReader : IReader
     {
-        public string ReadLine() => Console.ReadLine();
+        public string ReadLine()
+        {
+            return Console.ReadLine();
+        }
     }
 }

@@ -1,40 +1,37 @@
 ﻿namespace PlayersAndMonsters
 {
-    using Commands;
     using Core;
+    using Core.Contracts;
     using Core.Factories;
-    using IO;
-    using Models.BattleFields;
+    using Core.Factories.Contracts;
     using Repositories;
+    using Repositories.Contracts;
+    using IO;
+    using IO.Contracts;
+    using Models.BattleFields;
+    using Models.BattleFields.Contracts;
 
     public class StartUp
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
-            var commandParser = new CommandParser();
+            IReader reader = new ConsoleReader();
+            IWriter writer = new ConsoleWriter();
 
-            var playerRepository = new PlayerRepository();
-            var cardRepository = new CardRepository();
-            var battleField = new BattleField();
-            var playerFactory = new PlayerFactory();
-            var cardFactory = new CardFactory();
+            IPlayerFactory playerFactory = new PlayerFactory();
+            IPlayerRepository playerRepository = new PlayerRepository();
+            ICardFactory cardFactory = new CardFactory();
+            ICardRepository cardRepository = new CardRepository();
+            IBattleField battleField = new BattleField();
 
-            var managerController = new ManagerController(
+            IManagerController managerController = new ManagerController(
+                playerFactory,
                 playerRepository,
+                cardFactory,
                 cardRepository,
-                battleField, 
-                playerFactory, 
-                cardFactory);
+                battleField);
 
-            var dataReader = new ConsoleReader();
-            var dataWriter = new ConsoleWriter();
-
-            var engine = new Engine(
-                commandParser,
-                managerController,
-                dataReader,
-                dataWriter);
-
+            IEngine engine = new Engine(reader, writer, managerController);
             engine.Run();
         }
     }
